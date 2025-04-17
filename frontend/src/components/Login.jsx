@@ -1,52 +1,78 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Card, TextField, Button, Typography, Box } from '@mui/material';
+import axios from 'axios';
 
-function Login({ login }) {
-  const [email, setEmail] = useState('');
+function Login() {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login(email, password);
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
+        username,
+        password,
+      });
+      localStorage.setItem('token', response.data.token);
+      navigate('/dashboard');
+    } catch (err) {
+      setError('Ungültige Anmeldedaten');
+    }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4">
-      <div className="card w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center mana-gradient mb-6">Willkommen, Summoner!</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder=" "
-              className="w-full"
-              required
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+      <Card sx={{ width: '100%', maxWidth: 400 }}>
+        <Box sx={{ p: 3, textAlign: 'center' }}>
+          <Typography variant="h2" className="mana-gradient" gutterBottom>
+            Login
+          </Typography>
+          {error && (
+            <Typography color="error" variant="body2" gutterBottom>
+              {error}
+            </Typography>
+          )}
+          <form onSubmit={handleSubmit}>
+            <TextField
+              label="Benutzername"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              fullWidth
+              margin="normal"
+              variant="outlined"
             />
-            <label>E-Mail</label>
-          </div>
-          <div className="input-group">
-            <input
+            <TextField
+              label="Passwort"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder=" "
-              className="w-full"
-              required
+              fullWidth
+              margin="normal"
+              variant="outlined"
             />
-            <label>Passwort</label>
-          </div>
-          <button type="submit" className="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700 transition duration-200">
-            Anmelden
-          </button>
-        </form>
-        <p className="text-center text-gray-400 mt-4">
-          Noch kein Konto?{' '}
-          <Link to="/register" className="text-blue-500 hover:underline">Registrieren</Link>
-        </p>
-      </div>
-    </div>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ mt: 2 }}
+            >
+              Einloggen
+            </Button>
+          </form>
+          <Button
+            onClick={() => navigate('/register')}
+            color="secondary"
+            sx={{ mt: 2 }}
+          >
+            Noch kein Konto? Registrieren
+          </Button>
+        </Box>
+      </Card>
+    </Box>
   );
 }
 
