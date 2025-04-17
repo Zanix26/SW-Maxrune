@@ -1,9 +1,16 @@
 /** @type {import('tailwindcss').Config} */
-
-export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+module.exports = {
+  content: [
+    './src/**/*.{js,jsx,ts,tsx}',
+  ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        gray: {
+          800: '#1F2A44', // Stelle sicher, dass gray-800 definiert ist
+        },
+      },
+    },
   },
   plugins: [],
-}
+};
