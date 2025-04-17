@@ -2,15 +2,36 @@
 module.exports = {
   content: [
     './src/**/*.{js,jsx,ts,tsx}',
+    './src/index.css',
+  ],
+  safelist: [
+    'rounded-lg',
+    'rounded',
+    'shadow-xl',
+    'border',
+    'p-6',
+    'w-full',
+    'p-3',
+    'pt-6',
+    'text-white',
+    'focus:outline-none',
+    'focus:border-blue-500',
+    'transition',
+    'duration-200',
+    'hover:scale-105',
+    'relative',
+    'mb-4',
+    'absolute',
+    'left-3',
+    'top-3',
+    'text-sm',
+    'transition-all',
+    'top-1',
+    'text-xs',
+    'text-blue-500',
   ],
   theme: {
-    extend: {
-      colors: {
-        gray: {
-          800: '#1F2A44', // Stelle sicher, dass gray-800 definiert ist
-        },
-      },
-    },
+    extend: {},
   },
   plugins: [],
 };
