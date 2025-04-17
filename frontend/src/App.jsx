@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { Routes, Route, useNavigate, Link } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
@@ -66,10 +66,12 @@ function App() {
   <div className="{token ? 'pt-16' : ''}">
       <Routes>
         <Route path="/" element={<Login login={login} register={register} />} />
+        <Route path="/register" element={<Register register={register} />} />
         <Route path="/dashboard" element={<Dashboard token={token} logout={logout} />} />
       </Routes>
     </div>
     </div>
   );
 }
+
 export default App;

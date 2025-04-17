@@ -56,7 +56,7 @@ function Register({register}) {
                 </form>
                 <p className="text-center text-gray-400 mt-4">
                     Bereits registriert?{' '}
-                    <Link to="/login" className="text-blue-500 hover:underline">
+                    <Link to="/" className="text-blue-500 hover:underline">
                         Einloggen
                     </Link>
                 </p>
