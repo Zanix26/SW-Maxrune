@@ -1,9 +1,10 @@
-import { useState } from "react";
-import axios from "axios";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Dashboard from "./components/Dashboard";
+import { useState } from 'react';
+import axios from 'axios';
+import { Routes, Route, useNavigate, Link } from 'react-router-dom';
+import Login from './components/Login';
+import Register from './components/Register';
+import Dashboard from './components/Dashboard';
+import { HomeIcon, CubeIcon, CogIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/solid';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
@@ -11,65 +12,79 @@ function App() {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
-        email,
-        password,
-      });
+      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const { token } = response.data;
       setToken(token);
       localStorage.setItem('token', token);
-      navigate("/dashboard");
+      navigate('/dashboard');
     } catch (error) {
-      console.error("Login fehlgeschlagen:", error);
-      alert
+      console.error('Login fehlgeschlagen:', error);
+      alert('Login fehlgeschlagen. Bitte überprüfe deine Anmeldedaten.');
     }
   };
 
-  const register = async ( username, email, password) => {
+  const register = async (username, email, password) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', {
-        username,
-        email,
-        password,
-      });
+      const response = await axios.post('http://localhost:5000/api/auth/register', { username, email, password });
+      const { token } = response.data;
       setToken(token);
       localStorage.setItem('token', token);
-      navigate("/dashboard");
+      navigate('/dashboard');
     } catch (error) {
-      console.error("Registrierung fehlgeschlagen:", error);
-      alert('Registrierung fehlgeschlagen. Bitte überprüfen Sie Ihre Eingaben.');
+      console.error('Registrierung fehlgeschlagen:', error);
+      alert('Registrierung fehlgeschlagen. Bitte überprüfe deine Eingaben.');
     }
   };
 
   const logout = () => {
     setToken('');
     localStorage.removeItem('token');
-    navigate("/");
+    navigate('/');
   };
 
   return (
     <div className="min-h-screen relative">
-      {/* Navigationsleiste nur sichtbar wenn eingeloggt*/}
+      {/* Schwebende Mana-Kristalle */}
+      <div className="mana-crystal mana-crystal-1"></div>
+      <div className="mana-crystal mana-crystal-2"></div>
+      <div className="mana-crystal mana-crystal-3"></div>
+      <div className="mana-crystal mana-crystal-4"></div>
+
+      {/* Sidebar (nur sichtbar, wenn eingeloggt) */}
       {token && (
-      <nav className="fixed top-0 left-0 w-full bg-gray-900 bg-opacity-90 shadow-lg z-10">
-        <div className="max-w-7x1 mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <h1 className="text-2x1 font-bold mana-gradient">SW MaxRune</h1>
-            </div>
-            <a href="/dashboard" className="text-grey-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
-            <button onClick={logout} className="bg-red-500 text-white px-4 py2 rounded hover:bg-red-600 transition duration-200">Abmelden</button>
+        <div className="fixed top-0 left-0 h-full w-64 bg-gray-900 bg-opacity-90 shadow-lg z-10 hidden md:block">
+          <div className="p-6">
+            <h1 className="text-2xl font-bold mana-gradient mb-8">SW MaxRune</h1>
+            <nav className="space-y-4">
+              <Link to="/dashboard" className="flex items-center text-gray-300 hover:text-white">
+                <HomeIcon className="w-6 h-6 mr-3" />
+                Dashboard
+              </Link>
+              <Link to="/monsters" className="flex items-center text-gray-300 hover:text-white">
+                <CubeIcon className="w-6 h-6 mr-3" />
+                Monster
+              </Link>
+              <Link to="/runes" className="flex items-center text-gray-300 hover:text-white">
+                <CogIcon className="w-6 h-6 mr-3" />
+                Runen
+              </Link>
+              <button onClick={logout} className="flex items-center text-gray-300 hover:text-white w-full text-left">
+                <ArrowRightOnRectangleIcon className="w-6 h-6 mr-3" />
+                Abmelden
+              </button>
+            </nav>
           </div>
         </div>
-      </nav>
       )}
-      {/*Hauptinhalt */}
-  <div className="{token ? 'pt-16' : ''}">
-      <Routes>
-        <Route path="/" element={<Login login={login} register={register} />} />
-        <Route path="/register" element={<Register register={register} />} />
-        <Route path="/dashboard" element={<Dashboard token={token} logout={logout} />} />
-      </Routes>
-    </div>
+
+      {/* Hauptinhalt */}
+      <div className={token ? 'md:ml-64' : ''}>
+        <Routes>
+          <Route path="/" element={<Login login={login} />} />
+          <Route path="/register" element={<Register register={register} />} />
+          <Route path="/dashboard" element={<Dashboard token={token} logout={logout} />} />
+        </Routes>
+      </div>
     </div>
   );
 }
