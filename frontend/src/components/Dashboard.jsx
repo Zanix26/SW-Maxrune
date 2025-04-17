@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { PlusIcon, XMarkIcon, UserIcon, CubeIcon, SparklesIcon, EyeIcon, PencilIcon } from '@heroicons/react/24/solid';
 
 function Dashboard({ token, logout }) {
   const [monsters, setMonsters] = useState([]);
@@ -98,11 +99,15 @@ function Dashboard({ token, logout }) {
       {/* Monster Sektion */}
       <div className="mb-12">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold text-gray-200">Deine Monster</h2>
+          <div className="flex items-center">
+            <UserIcon className="w-6 h-6 mr-2 text-blue-500" />
+            <h2 className="text-2xl font-semibold text-gray-200">Deine Monster</h2>
+          </div>
           <button
             onClick={() => setShowMonsterForm(true)}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-200"
+            className="flex items-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-200"
           >
+            <PlusIcon className="w-5 h-5 mr-2" />
             Monster hinzufügen
           </button>
         </div>
@@ -110,7 +115,17 @@ function Dashboard({ token, logout }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {monsters.map((monster) => (
               <div key={monster._id} className="card">
-                <h3 className="text-xl font-bold text-gray-200">{monster.name}</h3>
+                <div className="flex justify-between items-center">
+                  <h3 className="text-xl font-bold text-gray-200">{monster.name}</h3>
+                  <div className="flex space-x-2">
+                    <button className="text-gray-400 hover:text-blue-500">
+                      <EyeIcon className="w-5 h-5" />
+                    </button>
+                    <button className="text-gray-400 hover:text-blue-500">
+                      <PencilIcon className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
                 <p className="text-gray-400">Level: {monster.level}</p>
                 <p className="text-gray-400">HP: {monster.attributes.hp}</p>
                 <p className="text-gray-400">ATK: {monster.attributes.atk}</p>
@@ -125,11 +140,15 @@ function Dashboard({ token, logout }) {
       {/* Runen Sektion */}
       <div className="mb-12">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold text-gray-200">Deine Runen</h2>
+          <div className="flex items-center">
+            <CubeIcon className="w-6 h-6 mr-2 text-blue-500" />
+            <h2 className="text-2xl font-semibold text-gray-200">Deine Runen</h2>
+          </div>
           <button
             onClick={() => setShowRuneForm(true)}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
+            className="flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
           >
+            <PlusIcon className="w-5 h-5 mr-2" />
             Rune hinzufügen
           </button>
         </div>
@@ -137,7 +156,17 @@ function Dashboard({ token, logout }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {runes.map((rune) => (
               <div key={rune._id} className="card">
-                <h3 className="text-xl font-bold text-gray-200">{rune.type}</h3>
+                <div className="flex justify-between items-center">
+                  <h3 className="text-xl font-bold text-gray-200">{rune.type}</h3>
+                  <div className="flex space-x-2">
+                    <button className="text-gray-400 hover:text-blue-500">
+                      <EyeIcon className="w-5 h-5" />
+                    </button>
+                    <button className="text-gray-400 hover:text-blue-500">
+                      <PencilIcon className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
                 <p className="text-gray-400">Slot: {rune.slot}</p>
                 <p className="text-gray-400">Main Stat: {rune.mainStat}</p>
                 <p className="text-gray-400">Grade: {rune.grade}</p>
@@ -152,11 +181,15 @@ function Dashboard({ token, logout }) {
       {/* Optimizer Sektion */}
       <div className="mb-12">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold text-gray-200">Runen-Optimierung</h2>
+          <div className="flex items-center">
+            <SparklesIcon className="w-6 h-6 mr-2 text-blue-500" />
+            <h2 className="text-2xl font-semibold text-gray-200">Runen-Optimierung</h2>
+          </div>
           <button
             onClick={() => setShowOptimizerForm(true)}
-            className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition duration-200"
+            className="flex items-center bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition duration-200"
           >
+            <PlusIcon className="w-5 h-5 mr-2" />
             Build optimieren
           </button>
         </div>
@@ -164,7 +197,14 @@ function Dashboard({ token, logout }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {builds.map((build) => (
               <div key={build._id} className="card">
-                <h3 className="text-xl font-bold text-gray-200">Build für Monster ID: {build.monsterId}</h3>
+                <div className="flex justify-between items-center">
+                  <h3 className="text-xl font-bold text-gray-200">Build für Monster ID: {build.monsterId}</h3>
+                  <div className="flex space-x-2">
+                    <button className="text-gray-400 hover:text-blue-500">
+                      <EyeIcon className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
                 <p className="text-gray-400">Optimierte Stats:</p>
                 <p className="text-gray-400">HP: {build.optimizedStats.hp}</p>
                 <p className="text-gray-400">ATK: {build.optimizedStats.atk}</p>
@@ -182,7 +222,10 @@ function Dashboard({ token, logout }) {
       {showMonsterForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20 px-4">
           <div className="card w-full max-w-lg">
-            <h2 className="text-2xl font-bold mana-gradient mb-6">Monster hinzufügen</h2>
+            <div className="flex items-center mb-6">
+              <UserIcon className="w-6 h-6 mr-2 text-blue-500" />
+              <h2 className="text-2xl font-bold mana-gradient">Monster hinzufügen</h2>
+            </div>
             <form onSubmit={handleAddMonster}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="input-group">
@@ -252,11 +295,16 @@ function Dashboard({ token, logout }) {
                 <button
                   type="button"
                   onClick={() => setShowMonsterForm(false)}
-                  className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition duration-200"
+                  className="flex items-center bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition duration-200"
                 >
+                  <XMarkIcon className="w-5 h-5 mr-2" />
                   Abbrechen
                 </button>
-                <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-200">
+                <button
+                  type="submit"
+                  className="flex items-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-200"
+                >
+                  <PlusIcon className="w-5 h-5 mr-2" />
                   Hinzufügen
                 </button>
               </div>
@@ -269,7 +317,10 @@ function Dashboard({ token, logout }) {
       {showRuneForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20 px-4">
           <div className="card w-full max-w-lg">
-            <h2 className="text-2xl font-bold mana-gradient mb-6">Rune hinzufügen</h2>
+            <div className="flex items-center mb-6">
+              <CubeIcon className="w-6 h-6 mr-2 text-blue-500" />
+              <h2 className="text-2xl font-bold mana-gradient">Rune hinzufügen</h2>
+            </div>
             <form onSubmit={handleAddRune}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="input-group">
@@ -323,11 +374,16 @@ function Dashboard({ token, logout }) {
                 <button
                   type="button"
                   onClick={() => setShowRuneForm(false)}
-                  className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition duration-200"
+                  className="flex items-center bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition duration-200"
                 >
+                  <XMarkIcon className="w-5 h-5 mr-2" />
                   Abbrechen
                 </button>
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200">
+                <button
+                  type="submit"
+                  className="flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
+                >
+                  <PlusIcon className="w-5 h-5 mr-2" />
                   Hinzufügen
                 </button>
               </div>
@@ -340,7 +396,10 @@ function Dashboard({ token, logout }) {
       {showOptimizerForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20 px-4">
           <div className="card w-full max-w-lg">
-            <h2 className="text-2xl font-bold mana-gradient mb-6">Build optimieren</h2>
+            <div className="flex items-center mb-6">
+              <SparklesIcon className="w-6 h-6 mr-2 text-blue-500" />
+              <h2 className="text-2xl font-bold mana-gradient">Build optimieren</h2>
+            </div>
             <form onSubmit={handleOptimize}>
               <div className="input-group">
                 <select
@@ -426,11 +485,16 @@ function Dashboard({ token, logout }) {
                 <button
                   type="button"
                   onClick={() => setShowOptimizerForm(false)}
-                  className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition duration-200"
+                  className="flex items-center bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition duration-200"
                 >
+                  <XMarkIcon className="w-5 h-5 mr-2" />
                   Abbrechen
                 </button>
-                <button type="submit" className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition duration-200">
+                <button
+                  type="submit"
+                  className="flex items-center bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition duration-200"
+                >
+                  <SparklesIcon className="w-5 h-5 mr-2" />
                   Optimieren
                 </button>
               </div>
