@@ -1,64 +1,88 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Card, TextField, Button, Typography, Box } from '@mui/material';
+import axios from 'axios';
 
-function Register({ register }) {
+function Register() {
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    register(username, email, password);
+    try {
+      await axios.post('http://localhost:5000/api/auth/register', {
+        username,
+        email,
+        password,
+      });
+      navigate('/login');
+    } catch (err) {
+      setError('Registrierung fehlgeschlagen');
+    }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4">
-      <div className="card w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center mana-gradient mb-6">Werde ein Summoner!</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <input
-              type="text"
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+      <Card sx={{ width: '100%', maxWidth: 400 }}>
+        <Box sx={{ p: 3, textAlign: 'center' }}>
+          <Typography variant="h2" className="mana-gradient" gutterBottom>
+            Registrieren
+          </Typography>
+          {error && (
+            <Typography color="error" variant="body2" gutterBottom>
+              {error}
+            </Typography>
+          )}
+          <form onSubmit={handleSubmit}>
+            <TextField
+              label="Benutzername"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder=" "
-              className="w-full"
-              required
+              fullWidth
+              margin="normal"
+              variant="outlined"
             />
-            <label>Benutzername</label>
-          </div>
-          <div className="input-group">
-            <input
+            <TextField
+              label="E-Mail"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder=" "
-              className="w-full"
-              required
+              fullWidth
+              margin="normal"
+              variant="outlined"
             />
-            <label>E-Mail</label>
-          </div>
-          <div className="input-group">
-            <input
+            <TextField
+              label="Passwort"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder=" "
-              className="w-full"
-              required
+              fullWidth
+              margin="normal"
+              variant="outlined"
             />
-            <label>Passwort</label>
-          </div>
-          <button type="submit" className="w-full bg-green-500 text-white p-3 rounded hover:bg-green-600 transition duration-200">
-            Registrieren
-          </button>
-        </form>
-        <p className="text-center text-gray-400 mt-4">
-          Schon ein Konto?{' '}
-          <Link to="/" className="text-blue-500 hover:underline">Anmelden</Link>
-        </p>
-      </div>
-    </div>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ mt: 2 }}
+            >
+              Registrieren
+            </Button>
+          </form>
+          <Button
+            onClick={() => navigate('/login')}
+            color="secondary"
+            sx={{ mt: 2 }}
+          >
+            Bereits ein Konto? Einloggen
+          </Button>
+        </Box>
+      </Card>
+    </Box>
   );
 }
 
