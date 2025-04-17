@@ -4,12 +4,11 @@ import axios from 'axios';
 function Dashboard({ token, logout }) {
   const [monsters, setMonsters] = useState([]);
   const [runes, setRunes] = useState([]);
-  const [builds, setBuilds] = useState([]); // Neue Builds hinzufügen
+  const [builds, setBuilds] = useState([]);
   const [showMonsterForm, setShowMonsterForm] = useState(false);
   const [showRuneForm, setShowRuneForm] = useState(false);
   const [showOptimizerForm, setShowOptimizerForm] = useState(false);
 
-  // Formulardaten
   const [monsterData, setMonsterData] = useState({
     name: '',
     attributes: { hp: 0, atk: 0, def: 0, spd: 0 },
@@ -27,7 +26,6 @@ function Dashboard({ token, logout }) {
     targetStats: { hpWeight: 0.4, atkWeight: 0.3, defWeight: 0.2, spdWeight: 0.1 },
   });
 
-  // Daten abrufen
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -50,7 +48,6 @@ function Dashboard({ token, logout }) {
     fetchData();
   }, [token, logout]);
 
-  // Monster hinzufügen
   const handleAddMonster = async (e) => {
     e.preventDefault();
     try {
@@ -65,7 +62,6 @@ function Dashboard({ token, logout }) {
     }
   };
 
-  // Rune hinzufügen
   const handleAddRune = async (e) => {
     e.preventDefault();
     try {
@@ -80,7 +76,6 @@ function Dashboard({ token, logout }) {
     }
   };
 
-  // Optimizer ausführen
   const handleOptimize = async (e) => {
     e.preventDefault();
     try {
@@ -114,10 +109,7 @@ function Dashboard({ token, logout }) {
         {monsters.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {monsters.map((monster) => (
-              <div
-                key={monster._id}
-                className="bg-gray-800 bg-opacity-80 p-6 rounded-lg shadow-lg border border-gray-700 hover:scale-105 transition duration-200"
-              >
+              <div key={monster._id} className="card">
                 <h3 className="text-xl font-bold text-gray-200">{monster.name}</h3>
                 <p className="text-gray-400">Level: {monster.level}</p>
                 <p className="text-gray-400">HP: {monster.attributes.hp}</p>
@@ -144,10 +136,7 @@ function Dashboard({ token, logout }) {
         {runes.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {runes.map((rune) => (
-              <div
-                key={rune._id}
-                className="bg-gray-800 bg-opacity-80 p-6 rounded-lg shadow-lg border border-gray-700 hover:scale-105 transition duration-200"
-              >
+              <div key={rune._id} className="card">
                 <h3 className="text-xl font-bold text-gray-200">{rune.type}</h3>
                 <p className="text-gray-400">Slot: {rune.slot}</p>
                 <p className="text-gray-400">Main Stat: {rune.mainStat}</p>
@@ -174,10 +163,7 @@ function Dashboard({ token, logout }) {
         {builds.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {builds.map((build) => (
-              <div
-                key={build._id}
-                className="bg-gray-800 bg-opacity-80 p-6 rounded-lg shadow-lg border border-gray-700"
-              >
+              <div key={build._id} className="card">
                 <h3 className="text-xl font-bold text-gray-200">Build für Monster ID: {build.monsterId}</h3>
                 <p className="text-gray-400">Optimierte Stats:</p>
                 <p className="text-gray-400">HP: {build.optimizedStats.hp}</p>
@@ -192,71 +178,85 @@ function Dashboard({ token, logout }) {
         )}
       </div>
 
-      {/* Modal für Monster hinzufügen (bereits vorhanden) */}
+      {/* Modal für Monster hinzufügen */}
       {showMonsterForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <div className="bg-gray-800 p-8 rounded-lg w-full max-w-md">
-            <h2 className="text-2xl font-bold mana-gradient mb-4">Monster hinzufügen</h2>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20 px-4">
+          <div className="card w-full max-w-lg">
+            <h2 className="text-2xl font-bold mana-gradient mb-6">Monster hinzufügen</h2>
             <form onSubmit={handleAddMonster}>
-              <div className="mb-4">
-                <label className="block text-gray-300">Name</label>
-                <input
-                  type="text"
-                  value={monsterData.name}
-                  onChange={(e) => setMonsterData({ ...monsterData, name: e.target.value })}
-                  className="w-full p-2 bg-gray-900 text-white border border-gray-600 rounded"
-                  required
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="input-group">
+                  <input
+                    type="text"
+                    value={monsterData.name}
+                    onChange={(e) => setMonsterData({ ...monsterData, name: e.target.value })}
+                    placeholder=" "
+                    required
+                  />
+                  <label>Name</label>
+                </div>
+                <div className="input-group">
+                  <input
+                    type="number"
+                    value={monsterData.level}
+                    onChange={(e) => setMonsterData({ ...monsterData, level: Number(e.target.value) })}
+                    placeholder=" "
+                    required
+                  />
+                  <label>Level</label>
+                </div>
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-300">HP</label>
-                <input
-                  type="number"
-                  value={monsterData.attributes.hp}
-                  onChange={(e) => setMonsterData({ ...monsterData, attributes: { ...monsterData.attributes, hp: Number(e.target.value) } })}
-                  className="w-full p-2 bg-gray-900 text-white border border-gray-600 rounded"
-                  required
-                />
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div className="input-group">
+                  <input
+                    type="number"
+                    value={monsterData.attributes.hp}
+                    onChange={(e) => setMonsterData({ ...monsterData, attributes: { ...monsterData.attributes, hp: Number(e.target.value) } })}
+                    placeholder=" "
+                    required
+                  />
+                  <label>HP</label>
+                </div>
+                <div className="input-group">
+                  <input
+                    type="number"
+                    value={monsterData.attributes.atk}
+                    onChange={(e) => setMonsterData({ ...monsterData, attributes: { ...monsterData.attributes, atk: Number(e.target.value) } })}
+                    placeholder=" "
+                    required
+                  />
+                  <label>ATK</label>
+                </div>
+                <div className="input-group">
+                  <input
+                    type="number"
+                    value={monsterData.attributes.def}
+                    onChange={(e) => setMonsterData({ ...monsterData, attributes: { ...monsterData.attributes, def: Number(e.target.value) } })}
+                    placeholder=" "
+                    required
+                  />
+                  <label>DEF</label>
+                </div>
+                <div className="input-group">
+                  <input
+                    type="number"
+                    value={monsterData.attributes.spd}
+                    onChange={(e) => setMonsterData({ ...monsterData, attributes: { ...monsterData.attributes, spd: Number(e.target.value) } })}
+                    placeholder=" "
+                    required
+                  />
+                  <label>SPD</label>
+                </div>
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-300">ATK</label>
-                <input
-                  type="number"
-                  value={monsterData.attributes.atk}
-                  onChange={(e) => setMonsterData({ ...monsterData, attributes: { ...monsterData.attributes, atk: Number(e.target.value) } })}
-                  className="w-full p-2 bg-gray-900 text-white border border-gray-600 rounded"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-300">DEF</label>
-                <input
-                  type="number"
-                  value={monsterData.attributes.def}
-                  onChange={(e) => setMonsterData({ ...monsterData, attributes: { ...monsterData.attributes, def: Number(e.target.value) } })}
-                  className="w-full p-2 bg-gray-900 text-white border border-gray-600 rounded"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-300">SPD</label>
-                <input
-                  type="number"
-                  value={monsterData.attributes.spd}
-                  onChange={(e) => setMonsterData({ ...monsterData, attributes: { ...monsterData.attributes, spd: Number(e.target.value) } })}
-                  className="w-full p-2 bg-gray-900 text-white border border-gray-600 rounded"
-                  required
-                />
-              </div>
-              <div className="flex justify-end space-x-4">
+              <div className="flex justify-end space-x-4 mt-6">
                 <button
                   type="button"
                   onClick={() => setShowMonsterForm(false)}
-                  className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+                  className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition duration-200"
                 >
                   Abbrechen
                 </button>
-                <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-200">
                   Hinzufügen
                 </button>
               </div>
@@ -265,65 +265,69 @@ function Dashboard({ token, logout }) {
         </div>
       )}
 
-      {/* Modal für Rune hinzufügen (bereits vorhanden) */}
+      {/* Modal für Rune hinzufügen */}
       {showRuneForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <div className="bg-gray-800 p-8 rounded-lg w-full max-w-md">
-            <h2 className="text-2xl font-bold mana-gradient mb-4">Rune hinzufügen</h2>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20 px-4">
+          <div className="card w-full max-w-lg">
+            <h2 className="text-2xl font-bold mana-gradient mb-6">Rune hinzufügen</h2>
             <form onSubmit={handleAddRune}>
-              <div className="mb-4">
-                <label className="block text-gray-300">Typ</label>
-                <input
-                  type="text"
-                  value={runeData.type}
-                  onChange={(e) => setRuneData({ ...runeData, type: e.target.value })}
-                  className="w-full p-2 bg-gray-900 text-white border border-gray-600 rounded"
-                  required
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="input-group">
+                  <input
+                    type="text"
+                    value={runeData.type}
+                    onChange={(e) => setRuneData({ ...runeData, type: e.target.value })}
+                    placeholder=" "
+                    required
+                  />
+                  <label>Typ</label>
+                </div>
+                <div className="input-group">
+                  <select
+                    value={runeData.slot}
+                    onChange={(e) => setRuneData({ ...runeData, slot: Number(e.target.value) })}
+                    placeholder=" "
+                  >
+                    {[1, 2, 3, 4, 5, 6].map(slot => (
+                      <option key={slot} value={slot}>{slot}</option>
+                    ))}
+                  </select>
+                  <label>Slot</label>
+                </div>
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-300">Slot</label>
-                <select
-                  value={runeData.slot}
-                  onChange={(e) => setRuneData({ ...runeData, slot: Number(e.target.value) })}
-                  className="w-full p-2 bg-gray-900 text-white border border-gray-600 rounded"
-                >
-                  {[1, 2, 3, 4, 5, 6].map(slot => (
-                    <option key={slot} value={slot}>{slot}</option>
-                  ))}
-                </select>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="input-group">
+                  <input
+                    type="text"
+                    value={runeData.mainStat}
+                    onChange={(e) => setRuneData({ ...runeData, mainStat: e.target.value })}
+                    placeholder=" "
+                    required
+                  />
+                  <label>Main Stat</label>
+                </div>
+                <div className="input-group">
+                  <select
+                    value={runeData.grade}
+                    onChange={(e) => setRuneData({ ...runeData, grade: Number(e.target.value) })}
+                    placeholder=" "
+                  >
+                    {[1, 2, 3, 4, 5, 6].map(grade => (
+                      <option key={grade} value={grade}>{grade}</option>
+                    ))}
+                  </select>
+                  <label>Grade</label>
+                </div>
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-300">Main Stat</label>
-                <input
-                  type="text"
-                  value={runeData.mainStat}
-                  onChange={(e) => setRuneData({ ...runeData, mainStat: e.target.value })}
-                  className="w-full p-2 bg-gray-900 text-white border border-gray-600 rounded"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-300">Grade</label>
-                <select
-                  value={runeData.grade}
-                  onChange={(e) => setRuneData({ ...runeData, grade: Number(e.target.value) })}
-                  className="w-full p-2 bg-gray-900 text-white border border-gray-600 rounded"
-                >
-                  {[1, 2, 3, 4, 5, 6].map(grade => (
-                    <option key={grade} value={grade}>{grade}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex justify-end space-x-4">
+              <div className="flex justify-end space-x-4 mt-6">
                 <button
                   type="button"
                   onClick={() => setShowRuneForm(false)}
-                  className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+                  className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition duration-200"
                 >
                   Abbrechen
                 </button>
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200">
                   Hinzufügen
                 </button>
               </div>
@@ -334,16 +338,15 @@ function Dashboard({ token, logout }) {
 
       {/* Modal für Optimizer */}
       {showOptimizerForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <div className="bg-gray-800 p-8 rounded-lg w-full max-w-md">
-            <h2 className="text-2xl font-bold mana-gradient mb-4">Build optimieren</h2>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20 px-4">
+          <div className="card w-full max-w-lg">
+            <h2 className="text-2xl font-bold mana-gradient mb-6">Build optimieren</h2>
             <form onSubmit={handleOptimize}>
-              <div className="mb-4">
-                <label className="block text-gray-300">Monster auswählen</label>
+              <div className="input-group">
                 <select
                   value={optimizerData.monsterId}
                   onChange={(e) => setOptimizerData({ ...optimizerData, monsterId: e.target.value })}
-                  className="w-full p-2 bg-gray-900 text-white border border-gray-600 rounded"
+                  placeholder=" "
                   required
                 >
                   <option value="">-- Wähle ein Monster --</option>
@@ -351,80 +354,83 @@ function Dashboard({ token, logout }) {
                     <option key={monster._id} value={monster._id}>{monster.name}</option>
                   ))}
                 </select>
+                <label>Monster auswählen</label>
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-300">HP Gewichtung</label>
-                <input
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  max="1"
-                  value={optimizerData.targetStats.hpWeight}
-                  onChange={(e) => setOptimizerData({
-                    ...optimizerData,
-                    targetStats: { ...optimizerData.targetStats, hpWeight: Number(e.target.value) }
-                  })}
-                  className="w-full p-2 bg-gray-900 text-white border border-gray-600 rounded"
-                  required
-                />
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div className="input-group">
+                  <input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="1"
+                    value={optimizerData.targetStats.hpWeight}
+                    onChange={(e) => setOptimizerData({
+                      ...optimizerData,
+                      targetStats: { ...optimizerData.targetStats, hpWeight: Number(e.target.value) }
+                    })}
+                    placeholder=" "
+                    required
+                  />
+                  <label>HP Gewichtung</label>
+                </div>
+                <div className="input-group">
+                  <input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="1"
+                    value={optimizerData.targetStats.atkWeight}
+                    onChange={(e) => setOptimizerData({
+                      ...optimizerData,
+                      targetStats: { ...optimizerData.targetStats, atkWeight: Number(e.target.value) }
+                    })}
+                    placeholder=" "
+                    required
+                  />
+                  <label>ATK Gewichtung</label>
+                </div>
+                <div className="input-group">
+                  <input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="1"
+                    value={optimizerData.targetStats.defWeight}
+                    onChange={(e) => setOptimizerData({
+                      ...optimizerData,
+                      targetStats: { ...optimizerData.targetStats, defWeight: Number(e.target.value) }
+                    })}
+                    placeholder=" "
+                    required
+                  />
+                  <label>DEF Gewichtung</label>
+                </div>
+                <div className="input-group">
+                  <input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="1"
+                    value={optimizerData.targetStats.spdWeight}
+                    onChange={(e) => setOptimizerData({
+                      ...optimizerData,
+                      targetStats: { ...optimizerData.targetStats, spdWeight: Number(e.target.value) }
+                    })}
+                    placeholder=" "
+                    required
+                  />
+                  <label>SPD Gewichtung</label>
+                </div>
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-300">ATK Gewichtung</label>
-                <input
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  max="1"
-                  value={optimizerData.targetStats.atkWeight}
-                  onChange={(e) => setOptimizerData({
-                    ...optimizerData,
-                    targetStats: { ...optimizerData.targetStats, atkWeight: Number(e.target.value) }
-                  })}
-                  className="w-full p-2 bg-gray-900 text-white border border-gray-600 rounded"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-300">DEF Gewichtung</label>
-                <input
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  max="1"
-                  value={optimizerData.targetStats.defWeight}
-                  onChange={(e) => setOptimizerData({
-                    ...optimizerData,
-                    targetStats: { ...optimizerData.targetStats, defWeight: Number(e.target.value) }
-                  })}
-                  className="w-full p-2 bg-gray-900 text-white border border-gray-600 rounded"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-300">SPD Gewichtung</label>
-                <input
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  max="1"
-                  value={optimizerData.targetStats.spdWeight}
-                  onChange={(e) => setOptimizerData({
-                    ...optimizerData,
-                    targetStats: { ...optimizerData.targetStats, spdWeight: Number(e.target.value) }
-                  })}
-                  className="w-full p-2 bg-gray-900 text-white border border-gray-600 rounded"
-                  required
-                />
-              </div>
-              <div className="flex justify-end space-x-4">
+              <div className="flex justify-end space-x-4 mt-6">
                 <button
                   type="button"
                   onClick={() => setShowOptimizerForm(false)}
-                  className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+                  className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition duration-200"
                 >
                   Abbrechen
                 </button>
-                <button type="submit" className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">
+                <button type="submit" className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition duration-200">
                   Optimieren
                 </button>
               </div>
