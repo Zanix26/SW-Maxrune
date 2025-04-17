@@ -26,12 +26,25 @@ a:hover {
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+ background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+ background-attachment: fixed;
+ position: relative;
+ overflow-x: hidden;
 }
+.mana-gradient {
+  background: linear-gradient(45deg, #55AAFF, #FFFFAA);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+@keyframes float {
+  0% { transform: translateY(0);
+  opacity: 0.7; }
+  50% { transform: translateY(-20px);
+  opacity: 1; }
+  100% { transform: translateY(0);
+  opacity: 0.7; }
+}
+
 
 h1 {
   font-size: 3.2em;
