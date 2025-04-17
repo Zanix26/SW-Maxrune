@@ -45,7 +45,8 @@ body {
 
 /* Professionelle Karten */
 .card {
-  @apply bg-gray-900 bg-opacity-90 rounded-lg shadow-xl border border-gray-700 p-6 transition-transform duration-200 hover:scale-105;
+  background-color: rgba(17, 24, 39, 0.9); /* gray-900 mit Opacity */
+  @apply rounded-lg shadow-xl border border-[#374151] p-6 transition-transform duration-200 hover:scale-105;
 }
 
 /* Eingabefelder mit schwebendem Label-Effekt */
@@ -54,12 +55,13 @@ body {
 }
 
 .input-group label {
-  @apply absolute left-3 top-3 text-gray-400 text-sm transition-all duration-200;
+  @apply absolute left-3 top-3 text-[#9CA3AF] text-sm transition-all duration-200;
 }
 
 .input-group input,
 .input-group select {
-  @apply w-full p-3 pt-6 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:border-blue-500 transition duration-200;
+  background-color: #111827; /* gray-900 */
+  @apply w-full p-3 pt-6 text-white border border-[#4B5563] rounded focus:outline-none focus:border-blue-500 transition duration-200;
 }
 
 .input-group input:focus + label,
