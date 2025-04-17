@@ -52,7 +52,7 @@ function App() {
 
       {/* Sidebar (nur sichtbar, wenn eingeloggt) */}
       {token && (
-        <div className="fixed top-0 left-0 h-full w-64 bg-gray-900 bg-opacity-90 shadow-lg z-10 hidden md:block">
+        <div className="bg-[#111827] bg-opacity-90 shadow-lg">
           <div className="p-6">
             <h1 className="text-2xl font-bold mana-gradient mb-8">SW MaxRune</h1>
             <nav className="space-y-4">
