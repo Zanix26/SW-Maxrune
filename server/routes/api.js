@@ -13,7 +13,7 @@ router.post('/auth/login', login);
 // Geschützte Routen
 router.get('/runes', authMiddleware, getRunes);
 router.post('/runes/add', authMiddleware, addRune);
-router.get('/monster', authMiddleware, getMonsters);
+router.get('/monsters', authMiddleware, getMonsters);
 router.post('/monsters/add', authMiddleware, addMonster);
 router.post('/optimize', authMiddleware, optimizeBuild); // Neuer Endpunkt
 
