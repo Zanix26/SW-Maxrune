@@ -3,7 +3,7 @@ const router = express.Router();
 const authMiddleware = require('../middleware/auth');
 const { register, login } = require('../controllers/authController');
 const { getRunes, addRune } = require('../controllers/runeController');
-const { getMonsters, addMonster } = require('../controllers/monsterController');
+const { getMonster, addMonster } = require('../controllers/monsterController');
 const { optimizeBuild } = require('../controllers/optimizerController'); // Neu hinzufügen
 
 // Authentifizierung
