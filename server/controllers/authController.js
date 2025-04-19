@@ -30,7 +30,7 @@ const login = async (req, res) => {
         if (!isMatch) return
         res.status(400).json({ message: 'Ungültiges Passwort.' });
 
-        const token = jwt.sign({ userId: user._id }, 'your_secret_jwt', { expiresIn: '1h'});
+        const token = jwt.sign({ userId: user._id }, 'your_jwt_secret', { expiresIn: '1h'});
         res.status(200).json({ token, user: { id:user._id, username: user.username} });
     } catch (error) {
         res.status(500).json({ message: 'Fehler beim Login', error });
