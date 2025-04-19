@@ -22,4 +22,4 @@ const addMonster = async (req, res) => {
     }
 };
 
-module.exports = { getMonsters, addMonster};
+module.exports = { getMonster, addMonster};
