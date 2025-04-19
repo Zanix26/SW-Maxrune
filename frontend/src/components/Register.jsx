@@ -5,22 +5,27 @@ import axios from 'axios';
 
 function Register() {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  console.log('Register.jsx: Rendering Register component');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/auth/register', {
+      console.log('Register.jsx: Sending register request to', `${import.meta.env.VITE_API_URL}/auth/register`);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, {
         username,
         email,
         password,
       });
+      console.log('Register.jsx: Registration successful:', response.data);
       navigate('/login');
     } catch (err) {
-      setError('Registrierung fehlgeschlagen');
+      console.error('Register.jsx: Registration error:', err.message);
+      setError('Registrierung fehlgeschlagen: ' + err.message);
     }
   };
 
