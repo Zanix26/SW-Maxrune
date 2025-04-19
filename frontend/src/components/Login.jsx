@@ -9,17 +9,22 @@ function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  console.log('Login.jsx: Rendering Login component');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      console.log('Login.jsx: Sending login request to', `${import.meta.env.VITE_API_URL}/auth/login`);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, {
         username,
         password,
       });
+      console.log('Login.jsx: Login successful:', response.data);
       localStorage.setItem('token', response.data.token);
       navigate('/dashboard');
     } catch (err) {
-      setError('Ungültige Anmeldedaten');
+      console.error('Login.jsx: Login error:', err.message);
+      setError('Ungültige Anmeldedaten: ' + err.message);
     }
   };
 
