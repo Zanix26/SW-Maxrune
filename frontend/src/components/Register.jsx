@@ -1,94 +1,71 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, TextField, Button, Typography, Box } from '@mui/material';
 import axios from 'axios';
 
-function Register() {
+const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  console.log('Register.jsx: Rendering Register component');
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log('Register.jsx: Sending register request to', `${import.meta.env.VITE_API_URL}/auth/register`);
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, {
-        username,
-        email,
-        password,
+      const response = await axios.post('https://optimizer.stocktropia.com/api/auth/register', {
+        username, // Muss "username" heißen, wie das Backend es erwartet
+        email,    // Muss "email" heißen
+        password, // Muss "password" heißen
       });
-      console.log('Register.jsx: Registration successful:', response.data);
-      navigate('/login');
+      // Token und Benutzerdaten speichern
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      // Zum Dashboard weiterleiten
+      navigate('/dashboard');
     } catch (err) {
-      console.error('Register.jsx: Registration error:', err.message);
-      setError('Registrierung fehlgeschlagen: ' + err.message);
+      setError(err.response?.data?.message || `Request failed with status code ${err.response?.status}`);
     }
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-      <Card sx={{ width: '100%', maxWidth: 400 }}>
-        <Box sx={{ p: 3, textAlign: 'center' }}>
-          <Typography variant="h2" className="mana-gradient" gutterBottom>
-            Registrieren
-          </Typography>
-          {error && (
-            <Typography color="error" variant="body2" gutterBottom>
-              {error}
-            </Typography>
-          )}
-          <form onSubmit={handleSubmit}>
-            <TextField
-              label="Benutzername"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              fullWidth
-              margin="normal"
-              variant="outlined"
-            />
-            <TextField
-              label="E-Mail"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              fullWidth
-              margin="normal"
-              variant="outlined"
-            />
-            <TextField
-              label="Passwort"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              fullWidth
-              margin="normal"
-              variant="outlined"
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-              sx={{ mt: 2 }}
-            >
-              Registrieren
-            </Button>
-          </form>
-          <Button
-            onClick={() => navigate('/login')}
-            color="secondary"
-            sx={{ mt: 2 }}
-          >
-            Bereits ein Konto? Einloggen
-          </Button>
-        </Box>
-      </Card>
-    </Box>
+    <div>
+      <h2>Registrieren</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Benutzername:</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>E-Mail:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Passwort:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit">Registrieren</button>
+      </form>
+      <p>
+        Bereits ein Konto? <a href="/login">Einloggen</a>
+      </p>
+    </div>
   );
-}
+};
 
 export default Register;
