@@ -10,12 +10,15 @@ function Dashboard() {
     const fetchMonsters = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:5000/api/monsters', {
+        console.log('Dashboard.jsx: Fetching monsters from', `${import.meta.env.VITE_API_URL}/monsters`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/monsters`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        console.log('Dashboard.jsx: Monsters fetched:', response.data);
         setMonsters(response.data);
       } catch (err) {
-        setError('Fehler beim Laden der Monster');
+        console.error('Dashboard.jsx: Error fetching monsters:', err.message);
+        setError('Fehler beim Laden der Monster: ' + err.message);
       }
     };
     fetchMonsters();
@@ -25,6 +28,8 @@ function Dashboard() {
     localStorage.removeItem('token');
     window.location.href = '/login';
   };
+
+  console.log('Dashboard.jsx: Rendering Dashboard component');
 
   return (
     <Box sx={{ p: 3, position: 'relative', minHeight: '100vh' }}>
