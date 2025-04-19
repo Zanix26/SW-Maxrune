@@ -4,7 +4,7 @@ import { Card, TextField, Button, Typography, Box } from '@mui/material';
 import axios from 'axios';
 
 function Login() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ function Login() {
     try {
       console.log('Login.jsx: Sending login request to', `${import.meta.env.VITE_API_URL}/auth/login`);
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, {
-        username,
+        email,
         password,
       });
       console.log('Login.jsx: Login successful:', response.data);
@@ -42,15 +42,16 @@ function Login() {
           )}
           <form onSubmit={handleSubmit}>
             <TextField
-              label="Benutzername"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              label="E-Mail:"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               fullWidth
               margin="normal"
               variant="outlined"
             />
             <TextField
-              label="Passwort"
+              label="Passwort:"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
