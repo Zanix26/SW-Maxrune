@@ -6,6 +6,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const redis = require('redis');
 const apiRoutes = require('./routes/api');
+const http = require('http'); // Neu: HTTP-Modul für mehr Kontrolle
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -33,7 +34,14 @@ redisClient.connect();
 // Routen
 app.use('/api', apiRoutes);
 
-// Server starten
-app.listen(PORT, '0.0.0.0', () => { // Änderung: Bind an 0.0.0.0 (IPv4 und IPv6)
-  console.log(`Server läuft auf Port ${PORT}`);
+// Server erstellen und explizit an IPv4 binden
+const server = http.createServer(app);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server läuft auf Port ${PORT} (IPv4)`);
+});
+
+// Optional: IPv4 explizit erzwingen
+server.on('listening', () => {
+  const address = server.address();
+  console.log(`Server lauscht auf ${address.address}:${address.port} (Family: ${address.family})`);
 });
