@@ -11,7 +11,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'https://optimizer.stocktropia.com',
+  credentials: true,
+}));
 app.use(express.json());
 
 // MongoDB-Verbindung
@@ -25,12 +28,12 @@ const redisClient = redis.createClient({
 });
 redisClient.on('connect', () => console.log('Redis verbunden'));
 redisClient.on('error', err => console.error('Redis-Verbindungsfehler:', err));
-redisClient.connect(); // Verbindung explizit herstellen (benötigt für neuere Redis-Versionen)
+redisClient.connect();
 
 // Routen
 app.use('/api', apiRoutes);
 
 // Server starten
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => { // Änderung: Bind an 0.0.0.0 (IPv4 und IPv6)
   console.log(`Server läuft auf Port ${PORT}`);
 });
