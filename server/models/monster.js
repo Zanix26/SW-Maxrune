@@ -19,8 +19,8 @@ const skillSchema = new mongoose.Schema({
 const monsterSchema = new mongoose.Schema({
   id: { type: Number, required: true, unique: true },
   name: { type: String, required: true },
-  element: { type: String, enum: ['Water', 'Fire', 'Wind', 'Light', 'Dark'] },
-  archetype: { type: String, enum: ['Attack', 'HP', 'Support', 'Defense', 'Material', 'none'] }, // 'none' hinzufügen
+  element: { type: String, enum: ['Water', 'Fire', 'Wind', 'Light', 'Dark', 'Pure'] }, // 'Pure' hinzufügen
+  archetype: { type: String, enum: ['Attack', 'HP', 'Support', 'Defense', 'Material', 'none'] },
   base_stars: { type: Number, min: 1, max: 6 },
   skills: [skillSchema],
 });
