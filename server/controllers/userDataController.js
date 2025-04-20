@@ -1,16 +1,5 @@
-const mongoose = require('mongoose');
 const fs = require('fs');
-
-// Schema für Benutzer-Daten (aus SWEX-JSON)
-const userDataSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, required: true },
-  runes: [{ type: Object }],
-  artifacts: [{ type: Object }],
-  monsters: [{ type: Object }],
-  uploadedAt: { type: Date, default: Date.now },
-});
-
-const UserData = mongoose.model('UserData', userDataSchema);
+const UserData = require('../models/userData'); // Importieren des Modells
 
 // JSON-Datei hochladen
 const uploadJson = async (req, res) => {
