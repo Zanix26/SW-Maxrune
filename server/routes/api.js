@@ -6,18 +6,18 @@ const { register, login } = require('../controllers/authController');
 const { getRunes, addRune } = require('../controllers/runeController');
 const { getMonster, addMonster } = require('../controllers/monsterController');
 const { optimizeBuild } = require('../controllers/optimizerController');
-const { uploadJson, getUserData } = require('../controllers/userDataController'); // Neue Controller
+const { uploadJson, getUserData } = require('../controllers/userDataController');
 
 // Multer-Konfiguration für Datei-Uploads
 const upload = multer({
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB Limit
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB Limit
   fileFilter: (req, file, cb) => {
     if (!file.originalname.match(/\.(json)$/)) {
-      return cb(new Error('Please upload a JSON file'));
+      return cb(new Error('Bitte lade eine JSON-Datei hoch'));
     }
     cb(null, true);
   },
-  storage: multer.memoryStorage(), // Speichere die Datei im Speicher, anstatt auf der Festplatte
+  storage: multer.memoryStorage(),
 });
 
 // Authentifizierung
