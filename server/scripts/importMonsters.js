@@ -14,7 +14,6 @@ async function fetchAllMonsters() {
     const response = await axios.get(nextUrl);
     allMonsters = allMonsters.concat(response.data.results);
     nextUrl = response.data.next;
-    // Pause von 1 Sekunde, um Rate Limits zu vermeiden
     if (nextUrl) await new Promise(resolve => setTimeout(resolve, 1000));
   }
 
@@ -27,7 +26,6 @@ async function fetchSkills(skillIds) {
     try {
       const response = await axios.get(`${SWARFARM_API}skills/${skillId}/`);
       skills.push(response.data);
-      // Pause von 1 Sekunde
       await new Promise(resolve => setTimeout(resolve, 1000));
     } catch (error) {
       console.error(`Fehler beim Abrufen von Skill ${skillId}: ${error.message}`);
@@ -67,7 +65,7 @@ async function importMonsters() {
           name: skill.name,
           description: skill.description,
           multiplier_formula: skill.multiplier_formula,
-          effects: skill.effects || [],
+          effects: skill.effects || [], // effects direkt verwenden
         })),
       };
 
