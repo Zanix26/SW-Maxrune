@@ -6,7 +6,7 @@ SW MaxRune ist eine Runen-Optimierungs-Website für Summoners War: Sky Arena
 
 #Technologie Stack
 
--Frontend: React, Tailwind CSS, Chart.js (für Radar-Charts)
+-Frontend: React, MUI, Chart.js (für Radar-Charts)
 
 -Backend: Node.js, Express, MongoDB, Redis
 
