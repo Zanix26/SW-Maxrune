@@ -1,6 +1,5 @@
-const mongoose = require('mongoose');
 const { optimizeMonster } = require('../utils/optimizer');
-const UserData = mongoose.model('UserData');
+const UserData = require('../models/userData'); // Importieren des Modells
 
 const optimizeBuild = async (req, res) => {
   try {
