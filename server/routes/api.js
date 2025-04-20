@@ -9,7 +9,16 @@ const { optimizeBuild } = require('../controllers/optimizerController');
 const { uploadJson, getUserData } = require('../controllers/userDataController'); // Neue Controller
 
 // Multer-Konfiguration für Datei-Uploads
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB Limit
+  fileFilter: (req, file, cb) => {
+    if (!file.originalname.match(/\.(json)$/)) {
+      return cb(new Error('Please upload a JSON file'));
+    }
+    cb(null, true);
+  },
+  storage: multer.memoryStorage(), // Speichere die Datei im Speicher, anstatt auf der Festplatte
+});
 
 // Authentifizierung
 router.post('/auth/register', register);
