@@ -1,15 +1,25 @@
 const mongoose = require('mongoose');
 
-const monsterSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    name: { type: String, required: true},
-    attributes: {
-        hp: { type: Number, required: true },
-        atk: { type: Number, required: true },
-        def: { type: Number, required: true },
-        spd: { type: Number, required: true },
+const skillSchema = new mongoose.Schema({
+  id: { type: Number, required: true },
+  name: { type: String, required: true },
+  description: { type: String },
+  multiplier_formula: { type: String },
+  effects: [
+    {
+      effect: { type: String },
+      chance: { type: Number },
     },
-    level: { type: Number, default: 1},
+  ],
+});
+
+const monsterSchema = new mongoose.Schema({
+  id: { type: Number, required: true, unique: true },
+  name: { type: String, required: true },
+  element: { type: String, enum: ['Water', 'Fire', 'Wind', 'Light', 'Dark'] },
+  archetype: { type: String, enum: ['Attack', 'HP', 'Support', 'Defense', 'Material'] },
+  base_stars: { type: Number, min: 1, max: 6 },
+  skills: [skillSchema], // Eingebettete Skills
 });
 
 module.exports = mongoose.model('Monster', monsterSchema);
