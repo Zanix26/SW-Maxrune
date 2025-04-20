@@ -1,42 +1,42 @@
-const fs = require('fs');
-const UserData = require('../models/userData'); // Importieren des Modells
+const UserData = require('../models/userData');
 
-// JSON-Datei hochladen
-const uploadJson = async (req, res) => {
+exports.uploadJson = async (req, res) => {
   try {
-    const jsonData = JSON.parse(fs.readFileSync(req.file.path, 'utf-8'));
+    const userId = req.user.id;
+    const jsonFile = req.file;
 
-    // Daten mit Benutzer-ID speichern
-    const userData = new UserData({
-      userId: req.userId,
-      runes: jsonData.runes || [],
-      artifacts: jsonData.artifacts || [],
-      monsters: jsonData.monsters || [],
-    });
-
-    await userData.save();
-
-    // Temporäre Datei löschen
-    fs.unlinkSync(req.file.path);
-
-    res.status(200).json({ message: 'JSON-Datei erfolgreich hochgeladen' });
-  } catch (error) {
-    res.status(500).json({ message: 'Fehler beim Hochladen der JSON-Datei', error: error.message });
-  }
-};
-
-// Benutzer-Daten abrufen
-const getUserData = async (req, res) => {
-  try {
-    const userData = await UserData.findOne({ userId: req.userId }).sort({ uploadedAt: -1 });
-    if (!userData) {
-      return res.status(404).json({ message: 'Keine hochgeladenen Daten gefunden' });
+    if (!jsonFile) {
+      return res.status(400).json({ message: 'Keine Datei hochgeladen' });
     }
 
-    res.status(200).json(userData);
+    const jsonData = JSON.parse(jsonFile.buffer.toString());
+    if (!jsonData.monsters || !jsonData.runes || !jsonData.artifacts) {
+      return res.status(400).json({ message: 'Ungültiges JSON-Format: monsters, runes und artifacts erforderlich' });
+    }
+
+    await UserData.findOneAndUpdate(
+      { userId },
+      { $set: { monsters: jsonData.monsters, runes: jsonData.runes, artifacts: jsonData.artifacts } },
+      { upsert: true }
+    );
+
+    res.json({ message: 'Daten erfolgreich hochgeladen' });
   } catch (error) {
-    res.status(500).json({ message: 'Fehler beim Abrufen der Benutzer-Daten', error: error.message });
+    res.status(500).json({ message: 'Fehler beim Hochladen der Daten', error: error.message });
   }
 };
 
-module.exports = { uploadJson, getUserData };
+exports.getUserData = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const userData = await UserData.findOne({ userId });
+
+    if (!userData) {
+      return res.status(404).json({ message: 'Keine Daten für diesen Benutzer gefunden' });
+    }
+
+    res.json(userData);
+  } catch (error) {
+    res.status(500).json({ message: 'Fehler beim Abrufen der Benutzerdaten', error: error.message });
+  }
+};
