@@ -25,7 +25,17 @@ async function fetchSkills(skillIds) {
   for (const skillId of skillIds) {
     try {
       const response = await axios.get(`${SWARFARM_API}skills/${skillId}/`);
-      skills.push(response.data);
+      const skill = response.data;
+      // Prüfe die Effekte auf fehlende 'name'-Werte
+      if (skill.effects) {
+        skill.effects.forEach((effect, index) => {
+          if (!effect.name) {
+            console.warn(`Skill ${skillId} hat einen Effekt ohne 'name' an Position ${index}: ${JSON.stringify(effect)}`);
+            effect.name = 'Unknown Effect'; // Standardwert setzen
+          }
+        });
+      }
+      skills.push(skill);
       await new Promise(resolve => setTimeout(resolve, 1000));
     } catch (error) {
       console.error(`Fehler beim Abrufen von Skill ${skillId}: ${error.message}`);
@@ -65,7 +75,7 @@ async function importMonsters() {
           name: skill.name,
           description: skill.description,
           multiplier_formula: skill.multiplier_formula,
-          effects: skill.effects || [], // effects direkt verwenden
+          effects: skill.effects || [],
         })),
       };
 
